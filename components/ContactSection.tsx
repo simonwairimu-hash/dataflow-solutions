@@ -14,12 +14,14 @@ export default function ContactSection() {
 
   const [submitStatus, setSubmitStatus] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { name, email, company, phone, service, message } = formData;
@@ -45,6 +47,9 @@ TechFlow Contact Form`
 
     const mailtoLink = `mailto:simontheanalyst0@gmail.com?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
+
+    // Optional success feedback (for UI message)
+    setSubmitStatus('success');
   };
 
   return (
@@ -61,6 +66,7 @@ TechFlow Contact Form`
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
+          {/* Left Info Column */}
           <div>
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-slate-900 mb-6">Get in Touch</h3>
@@ -91,28 +97,28 @@ TechFlow Contact Form`
             <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200">
               <h4 className="text-xl font-bold text-slate-900 mb-4">Why Choose TechFlow?</h4>
               <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <i className="ri-check-line text-green-500"></i>
-                  <span className="text-slate-700">Free initial consultation</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <i className="ri-check-line text-green-500"></i>
-                  <span className="text-slate-700">Custom solutions for your business</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <i className="ri-check-line text-green-500"></i>
-                  <span className="text-slate-700">Proven track record with 150+ clients</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <i className="ri-check-line text-green-500"></i>
-                  <span className="text-slate-700">24/7 support and maintenance</span>
-                </div>
+                {[
+                  'Free initial consultation',
+                  'Custom solutions for your business',
+                  'Proven track record with 150+ clients',
+                  '24/7 support and maintenance'
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center gap-3">
+                    <i className="ri-check-line text-green-500"></i>
+                    <span className="text-slate-700">{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
+          {/* Form Column */}
           <div>
-            <form id="contact-form" onSubmit={handleSubmit} className="bg-slate-50 p-8 rounded-2xl border border-slate-200">
+            <form
+              id="contact-form"
+              onSubmit={handleSubmit}
+              className="bg-slate-50 p-8 rounded-2xl border border-slate-200"
+            >
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label className="block text-sm font-semibold text-slate-900 mb-2">
@@ -228,8 +234,16 @@ TechFlow Contact Form`
               </button>
 
               {submitStatus && (
-                <div className={`mt-6 p-4 rounded-lg ${submitStatus === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-                  {submitStatus === 'success' ? 'Thank you! Your message has been sent successfully.' : 'Sorry, there was an error sending your message. Please try again.'}
+                <div
+                  className={`mt-6 p-4 rounded-lg ${
+                    submitStatus === 'success'
+                      ? 'bg-green-50 text-green-800 border border-green-200'
+                      : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}
+                >
+                  {submitStatus === 'success'
+                    ? 'Thank you! Your message has been sent successfully.'
+                    : 'Sorry, there was an error sending your message. Please try again.'}
                 </div>
               )}
             </form>
